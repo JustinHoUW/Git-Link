@@ -28,6 +28,37 @@
     </div>
 
     <script>
+        
+        class UI {
+            constructor(){
+                this.profile = document.getElementById("profile");
+            }
+
+            // display profile
+            showProfile(user) {
+                this.profile.innerHTML = `
+                    <div class = "card card-body mb-3">
+                        <div class = "row">
+                                <div class = "col-md-3">
+                                    <img class = "img-fluid mb-2" src = "${user.avatar_url}">
+                                    <a href = "${user.html_url}" class = "btn btn-primary btn-block" target = "_blank">View Profile</a>
+                                </div>
+                                <div class = "col-md-5">
+                                    <span class = "badge badge-primary">Public Repos: ${user.public_repos}</span>
+                                    <span class = "badge badge-primary">Public Gists: ${user.public_gists}</span>
+                                    <span class = "badge badge-primary">Followers: ${user.followers}</span>
+                                    <span class = "badge badge-primary">Following: ${user.following}</span>
+                                    <br>
+                                    <ul class = "list-group">
+                                        <li class = "list-group-item">Company: ${user.company}</li>
+                                    </ul>
+                                </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+        
         class Github {
             constructor() {
                 this.client_id = "";
@@ -36,8 +67,9 @@
             }
 
             async getUser(user) {
+                //const accessToken = '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'; // Replace 'your_access_token' with your actual access token
                 // Make asynchronous request to GitHub API to fetch information for the specified username
-                const profileResponse = await fetch(`http://api.github.com/users/${user}`);
+                const profileResponse = await fetch(`https://api.github.com/users/${user}`);
                 const profileData = await profileResponse.json();
                 return {profileData};
 
@@ -57,7 +89,12 @@
                 const userText = e.target.value;
 
                 // connect to Github API
-                console.log(userText);
+                github.getUser(userText)
+                .then (data => {
+                    console.log(data);
+                }); // process data
+
+                //console.log(userText);
             })
 
     </script>
